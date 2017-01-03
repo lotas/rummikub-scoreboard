@@ -9,7 +9,7 @@ import Divider from 'material-ui/Divider';
 import ActionCached from 'material-ui/svg-icons/action/cached';
 import RaisedButton from 'material-ui/RaisedButton';
 
-
+import NewGameHelp from './NewGameHelp';
 import PlayersList from './PlayersList';
 import ScoringTable from './ScoringTable';
 import TilesSelector from './TilesSelector';
@@ -142,25 +142,41 @@ class App extends Component {
               />
               <Divider />
               <RaisedButton
-                label="New game"
+                label="Start playing"
                 labelPosition="after"
                 primary={true}
+
+                style={{margin: 20}}
+                onTouchTap={this.toggleMenu.bind(this)}
+              />
+              <Divider/>
+              <RaisedButton
+                label="Reset"
+                labelPosition="after"
+                primary={false}
                 icon={<ActionCached />}
                 style={{marginTop: 20}}
                 onTouchTap={this.newGame.bind(this)}
               />
           </Drawer>
           <div className="App-main">
-            <ScoringTable
-              players={this.state.players}
-              score={this.state.score}
-              current={this.state.current}
-              setCurrent={this.setCurrent.bind(this)}
-              removePlayer={this.removePlayer.bind(this)}
-              />
+          {this.state.players && this.state.players.length ?
+              <ScoringTable
+                players={this.state.players}
+                score={this.state.score}
+                current={this.state.current}
+                setCurrent={this.setCurrent.bind(this)}
+                removePlayer={this.removePlayer.bind(this)}
+                />
+                :
+                <NewGameHelp
+                  toggleMenu={this.toggleMenu.bind(this)}
+                  />
+            }
           </div>
           {this.state.open ? <TilesSelector
                   current={this.state.current}
+                  tiles={this.state.tempTiles}
                   setTiles={this.setTiles.bind(this)}
                   handleClose={this.handleClose.bind(this)}
                   saveClose={this.saveClose.bind(this)}

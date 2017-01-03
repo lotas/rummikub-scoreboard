@@ -17,7 +17,7 @@ class ScoreTiles extends Component {
     render() {
         let i = 0;
         return (
-            <span className="score-tiles">
+            <span className="scoreTiles">
                 {this.props.tiles.map(tile =>
                     <span key={i++} className={`tile-color${tile.color}`}>{tile.tile}</span>
                 )}
@@ -67,8 +67,8 @@ class ScoringTable extends Component {
             for (let j=0; j<names.length; j++) {
                 if (score[names[j]] && score[names[j]][i]) {
                     row.push(<TableRowColumn key={`i:j`}>
-                            <b>{score[names[j]][i].score}</b>
                             <ScoreTiles tiles={score[names[j]][i].tiles} />
+                            <span className="turnScore">{score[names[j]][i].score}</span>
                         </TableRowColumn>);
                 } else {
                     row.push(<TableRowColumn key={`i:j`}>0</TableRowColumn>);
@@ -110,10 +110,6 @@ class ScoringTable extends Component {
     }
 
     render() {
-        if (!this.props.players || !this.props.players.length) {
-            return (<p>Please start with adding some users</p>);
-        }
-
         return (
           <div className="ScoringTable">
             <Table selectable={false} border={true} fixedHeader={true}>
