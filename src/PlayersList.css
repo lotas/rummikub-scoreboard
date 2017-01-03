@@ -1,0 +1,13 @@
+.PlayersList {
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    max-width: 240px;
+    margin: 20px;
+    text-align: left;
+}
+
+@media (max-width: 720px) {
+    .PlayersList {
+        max-width: 100%;
+    }
+}
