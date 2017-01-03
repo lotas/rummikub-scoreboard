@@ -1,17 +1,30 @@
 import React, { Component } from 'react';
 
-import Paper from 'material-ui/Paper';
-
 import './TileSelector.css';
 
-import {
-  deepPurple800,
-  pink700,
-  green800,
-  blue800,
+class TilesRow extends Component {
 
-  grey300
-} from 'material-ui/styles/colors';
+    shouldComponentUpdate(nextProps, nextState) {
+        const keyCheck = `${nextProps.color}:`;
+        // if some tiles were selected, we should update, okay
+        return Object.keys(nextProps.selected).filter(a => a.substr(0, 2) === keyCheck).length > 0
+    }
+
+    render() {
+        const tiles = [1,2,3,4,5,6,7,8,9,10,11,12,13,'J'];
+        const {color, getSelectedState, onSelectClick} = this.props;
+
+        return <div className="TilesRow">
+                {tiles.map(tile => (
+                    <div
+                        key={`${color}:${tile}`}
+                        className={`TileBlock tile-color${color} ${getSelectedState(color, tile) ? 'selected' : ''}`}
+                        onMouseDownCapture={() => onSelectClick(color, tile)}>
+                        {tile}
+                    </div>
+                ))}</div>;
+    }
+}
 
 class TilesSelector extends Component {
 
@@ -44,29 +57,15 @@ class TilesSelector extends Component {
     }
 
     render() {
-        const colors = [deepPurple800, pink700, green800, blue800];
-        const tiles = [1,2,3,4,5,6,7,8,9,10,11,12,13,'J'];
-        const style = {};
+        const setState = this.setSelectedState.bind(this);
+        const getState = this.getSelectedState.bind(this);
 
         return (
           <div className="TilesSelector">
-            {
-                colors.map(color => {
-                    return tiles.map(tile => {
-                        let styleC = {...style, color: color}
-
-                        if (this.getSelectedState(color, tile)) {
-                            styleC.backgroundColor = grey300;
-                        }
-                        return (
-                            <Paper zDepth={1} className="TileBlock" style={styleC} onTouchTap={() => this.setSelectedState(color, tile)}>
-                                {tile}
-                            </Paper>
-                        );
-                    })
-                })
-            }
-
+            <TilesRow color={1} getSelectedState={getState} onSelectClick={setState} selected={this.state.selected} />
+            <TilesRow color={2} getSelectedState={getState} onSelectClick={setState} selected={this.state.selected} />
+            <TilesRow color={3} getSelectedState={getState} onSelectClick={setState} selected={this.state.selected} />
+            <TilesRow color={4} getSelectedState={getState} onSelectClick={setState} selected={this.state.selected} />
           </div>
         )
     }

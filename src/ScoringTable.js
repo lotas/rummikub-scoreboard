@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, TableFooter} from 'material-ui/Table';
-
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 import Badge from 'material-ui/Badge';
 
@@ -12,13 +9,7 @@ import './ScoringTable.css';
 
 import {
   lightBlue50,
-  lightBlue800,
-  blue300,
-  indigo900, indigo500,
-  orange200,
-  deepOrange300,
-  pink400,
-  purple500,
+  indigo500
 } from 'material-ui/styles/colors';
 
 class ScoreTiles extends Component {
@@ -28,7 +19,7 @@ class ScoreTiles extends Component {
         return (
             <span className="score-tiles">
                 {this.props.tiles.map(tile =>
-                    <span key={i++} style={{color: tile.color}}>{tile.tile}</span>
+                    <span key={i++} className={`tile-color${tile.color}`}>{tile.tile}</span>
                 )}
             </span>
         )
@@ -38,6 +29,12 @@ class ScoreTiles extends Component {
 class ScoringTable extends Component {
 
     showCheckboxes = false;
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.current !== nextProps.current ||
+                this.props.players !== nextProps.players ||
+                this.props.score !== nextProps.score;
+    }
 
     getStyle(player) {
         if (player && this.props.current &&  player.name === this.props.current.name) {
@@ -85,7 +82,6 @@ class ScoringTable extends Component {
 
     renderHeaders() {
         const score = this.props.score;
-        console.log(this.props.players);
 
         const getTotalForPlayer = (name) => {
             const empty = {score: 0};

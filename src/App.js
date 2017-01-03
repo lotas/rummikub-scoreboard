@@ -46,7 +46,7 @@ class App extends Component {
     super.setState(state);
     set(STATE_KEY, state);
 
-    console.log(this.state);
+    console.debug(this.state);
   }
 
   addPlayer(name, color) {
@@ -162,6 +162,7 @@ class App extends Component {
               />
           </div>
           <Dialog
+            style={{userSelect: 'none'}}
             open={this.state.open}
             modal={true}
             title={this.state.current ? ("Select tiles for " + this.state.current.name) : ''}

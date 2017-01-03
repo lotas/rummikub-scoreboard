@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -13,9 +12,6 @@ import Avatar from 'material-ui/Avatar';
 
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
 
 import './PlayersList.css';
 
@@ -52,6 +48,11 @@ class PlayersList extends Component {
 
     state = {
         name: ''
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        // only when players were changed or state was changed
+        return this.props.players !== nextProps.players || this.state !== nextState;
     }
 
     setNewName = (event) => {
