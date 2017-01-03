@@ -3,13 +3,17 @@ import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
 
 import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 
@@ -35,16 +39,16 @@ const getNextColor = () => {
     return next;
 }
 
-const iconButtonElement = (
-  <IconButton
-    touch={true}
-  >
-    <MoreVertIcon color={grey400} />
-  </IconButton>
-);
-
 
 class PlayersList extends Component {
+
+    static propTypes = {
+        players: React.PropTypes.array,
+        addPlayer: React.PropTypes.func,
+        removePlayer: React.PropTypes.func,
+        current: React.PropTypes.object,
+        setCurrent: React.PropTypes.func
+    };
 
     state = {
         name: ''
@@ -58,7 +62,11 @@ class PlayersList extends Component {
 
     submit(e) {
         e.preventDefault();
-        this.props.addPlayer(this.state.name, getNextColor());
+        if (this.state.name.trim() === "") {
+            return false;
+        }
+
+        this.props.addPlayer(this.state.name.trim(), getNextColor());
         e.target.value = '';
         this.setState({name: ''});
         return false;
@@ -78,11 +86,12 @@ class PlayersList extends Component {
                             <Avatar backgroundColor={player.color}>{player.name.charAt(0).toUpperCase()}</Avatar>
                         }
                         rightIconButton={
-                            <IconMenu iconButtonElement={iconButtonElement}>
-                                <MenuItem onClick={() => this.props.remove(player)}>Delete</MenuItem>
-                            </IconMenu>
+                              <IconButton
+                                    touch={true}
+                                >
+                                <DeleteIcon color={grey400} onTouchTap={() => this.props.removePlayer(player)} />
+                            </IconButton>
                         }
-                        onClick={() => this.props.setCurrent(player)}
                     />
                 ))}
                 </List>
@@ -93,8 +102,13 @@ class PlayersList extends Component {
                             hintText="Player name"
                             id="name"
                             value={this.state.name}
-                            onChange={this.setNewName} />
-                        <RaisedButton type="submit"  label="Add" />
+                            onChange={this.setNewName}
+                            style={{maxWidth: 180}}
+                            />
+                        <FloatingActionButton mini={true} type="submit">
+                           <ContentAdd />
+                        </FloatingActionButton>
+
                     </form>
                 </div>
             </div>

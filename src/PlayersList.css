@@ -5,6 +5,9 @@
     margin: 20px;
     text-align: left;
 }
+.PlayersList-add {
+    margin-top: 10px;
+}
 
 @media (max-width: 720px) {
     .PlayersList {

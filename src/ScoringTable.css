@@ -1,7 +1,20 @@
 .ScoringTable {
     /*display: flex;*/
     /*flex-direction: column;*/
-    max-width: 720px;
+    /*max-width: 720px;*/
     margin: 20px;
     text-align: left;
+}
+
+.ScoringTable .score-tiles {
+    margin-left: 10px;
+    color: #ccc;
+    float: right;
+}
+
+.ScoringTable .score-tiles span{
+    margin-left: 4px;
+    /*opacity: 0.7;*/
+    padding: 1px;
+    border: 1px dotted #eee;
 }

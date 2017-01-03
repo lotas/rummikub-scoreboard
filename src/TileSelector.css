@@ -1,0 +1,19 @@
+.TileBlock{
+    height: 60px;
+    width: 34px;
+    margin: 8px;
+    padding: 20px 4px;
+    text-align: center;
+    display: inline-block;
+    font-size: 20px;
+}
+
+@media (max-width: 480px) {
+    .TileBlock {
+        height: 40px;
+        width: 28px;
+        padding: 10px 5px;
+        font-size: 18px;
+        margin: 6px;
+    }
+}

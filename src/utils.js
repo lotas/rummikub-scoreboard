@@ -38,6 +38,11 @@ export function next(elm, array) {
     return array[(idx + 1) % (array.length)];
 }
 
+export function toInt(val) {
+    let r = parseInt(val, 10);
+    return isNaN(r) ? 0 : r;
+}
+
 
 /**
  *
@@ -51,15 +56,22 @@ export function updateScore(current, tiles, score) {
     }
 
     let turnTotal = 0;
+    let tilesArr = [];
+
     for (let tileStr in tiles) {
         if (!tiles[tileStr]) {
             continue;
         }
-        let [, tile] = tileStr.split(':');
-        turnTotal += parseInt(tile, 10);
+        let [clr, tile] = tileStr.split(':');
+        turnTotal += toInt(tile);
+        tilesArr.push({tile: tile, color: clr});
     }
 
-    newScore[name].push(turnTotal);
+    newScore[name].push({
+        score: turnTotal,
+        tiles: tilesArr
+    });
 
     return newScore;
 }
+

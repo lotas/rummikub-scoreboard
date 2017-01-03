@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import Paper from 'material-ui/Paper';
 
-
-// import './ScoringTable.css';
+import './TileSelector.css';
 
 import {
   deepPurple800,
@@ -51,15 +46,7 @@ class TilesSelector extends Component {
     render() {
         const colors = [deepPurple800, pink700, green800, blue800];
         const tiles = [1,2,3,4,5,6,7,8,9,10,11,12,13,'J'];
-        const style = {
-            height: 60,
-            width: 34,
-            margin: 8,
-            padding: '20px 4px',
-            textAlign: 'center',
-            display: 'inline-block',
-            fontSize: 20
-        };
+        const style = {};
 
         return (
           <div className="TilesSelector">
@@ -72,7 +59,7 @@ class TilesSelector extends Component {
                             styleC.backgroundColor = grey300;
                         }
                         return (
-                            <Paper zDepth={1} style={styleC} onTouchTap={() => this.setSelectedState(color, tile)}>
+                            <Paper zDepth={1} className="TileBlock" style={styleC} onTouchTap={() => this.setSelectedState(color, tile)}>
                                 {tile}
                             </Paper>
                         );

@@ -6,6 +6,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import Badge from 'material-ui/Badge';
 
+import { toInt } from './utils';
 
 import './ScoringTable.css';
 
@@ -20,12 +21,26 @@ import {
   purple500,
 } from 'material-ui/styles/colors';
 
+class ScoreTiles extends Component {
+
+    render() {
+        let i = 0;
+        return (
+            <span className="score-tiles">
+                {this.props.tiles.map(tile =>
+                    <span key={i++} style={{color: tile.color}}>{tile.tile}</span>
+                )}
+            </span>
+        )
+    }
+}
+
 class ScoringTable extends Component {
 
     showCheckboxes = false;
 
     getStyle(player) {
-        if (player.name === this.props.current.name) {
+        if (player && this.props.current &&  player.name === this.props.current.name) {
             return {
                 fontSize: 18,
                 color: indigo500,
@@ -54,55 +69,66 @@ class ScoringTable extends Component {
             let row = [];
             for (let j=0; j<names.length; j++) {
                 if (score[names[j]] && score[names[j]][i]) {
-                    row.push(<TableRowColumn key={`i:j`}>{score[names[j]][i]}</TableRowColumn>);
+                    row.push(<TableRowColumn key={`i:j`}>
+                            <b>{score[names[j]][i].score}</b>
+                            <ScoreTiles tiles={score[names[j]][i].tiles} />
+                        </TableRowColumn>);
                 } else {
                     row.push(<TableRowColumn key={`i:j`}>0</TableRowColumn>);
                 }
             }
-            grid.push(<TableRow key={i}>{row}</TableRow>);
+            grid.push(<TableRow  hoverable={true} key={i}>{row}</TableRow>);
         }
 
         return grid;
     }
 
+    renderHeaders() {
+        const score = this.props.score;
+        console.log(this.props.players);
+
+        const getTotalForPlayer = (name) => {
+            const empty = {score: 0};
+            return (score[name] || [empty])
+                    .map(a => a.score)
+                    .reduce((a, b) => toInt(a) + toInt(b));
+        }
+
+        return this.props.players.map(player => (
+            <TableHeaderColumn
+                style={this.getStyle(player)}
+                key={player.name}
+                onTouchTap={() => this.props.setCurrent(player, true)}
+            >
+                {player.name}
+                <Badge primary={true} badgeContent={getTotalForPlayer(player.name)} />
+            </TableHeaderColumn>
+        ));
+
+    }
 
     render() {
-        if (!this.props.players) {
-            return (<div />);
-        }
-
-        const score = this.props.score;
-
-        const toInt = (val) => {
-            let r = parseInt(val, 10);
-            return isNaN(r) ? 0 : r;
-        }
-        const getTotalForPlayer = (name) => {
-            return (score[name] || []).reduce((a, b) => toInt(a) + toInt(b));
+        if (!this.props.players || !this.props.players.length) {
+            return (<p>Please start with adding some users</p>);
         }
 
         return (
           <div className="ScoringTable">
-            <Table selectable={false}>
-                <TableHeader displaySelectAll={this.showCheckboxes} adjustForCheckboxes={this.showCheckboxes}>
-                    <TableRow>
-                {this.props.players.map(player => (
-                    <TableHeaderColumn
-                        style={this.getStyle(player)}
-                        key={player.name}
-                        onTouchTap={() => this.props.setCurrent(player, true)}
+            <Table selectable={false} border={true}>
+                <TableHeader
+                    displaySelectAll={false}
+                    adjustForCheckbox={false}
+                    enableSelectAll={false}
                     >
-                        {player.name}
-                        <Badge primary={true} badgeContent={getTotalForPlayer(player.name)} />
-
-                        {/*<FloatingActionButton mini={true} secondary={true} style={{float: 'right'}}>
-                            <ContentAdd onTouchTap={() => this.props.setCurrent(player, true)} />
-                        </FloatingActionButton>*/}
-                    </TableHeaderColumn>
-                ))}
+                    <TableRow>
+                        {this.renderHeaders()}
                     </TableRow>
                 </TableHeader>
-                <TableBody displayRowCheckbox={this.showCheckboxes}>
+                <TableBody
+                    showRowHover={true}
+                    stripedRows={false}
+                    displayRowCheckbox={false}
+                    >
                     {this.renderScores()}
                 </TableBody>
             </Table>
