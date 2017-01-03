@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
-import Badge from 'material-ui/Badge';
-
 import { toInt } from './utils';
+
+import UserIcon from './UserIcon';
 
 import './ScoringTable.css';
 
@@ -90,16 +90,22 @@ class ScoringTable extends Component {
                     .reduce((a, b) => toInt(a) + toInt(b));
         }
 
-        return this.props.players.map(player => (
-            <TableHeaderColumn
-                style={this.getStyle(player)}
-                key={player.name}
-                onTouchTap={() => this.props.setCurrent(player, true)}
-            >
-                {player.name}
-                <Badge primary={true} badgeContent={getTotalForPlayer(player.name)} />
-            </TableHeaderColumn>
-        ));
+        const totalScores = this.props.players.map(player => getTotalForPlayer(player.name));
+
+        return this.props.players.map(player => {
+            const totalForUser = getTotalForPlayer(player.name);
+            return (
+                <TableHeaderColumn
+                    style={this.getStyle(player)}
+                    key={player.name}
+                    onTouchTap={() => this.props.setCurrent(player, true)}
+                >
+                    <UserIcon player={player} total={totalForUser} totalScores={totalScores} />
+                    {player.name}
+                    <div className="totalScore">{totalForUser}</div>
+                </TableHeaderColumn>
+            )
+        });
 
     }
 
@@ -110,7 +116,7 @@ class ScoringTable extends Component {
 
         return (
           <div className="ScoringTable">
-            <Table selectable={false} border={true}>
+            <Table selectable={false} border={true} fixedHeader={true}>
                 <TableHeader
                     displaySelectAll={false}
                     adjustForCheckbox={false}

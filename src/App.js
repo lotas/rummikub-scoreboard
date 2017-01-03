@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FlatButton from 'material-ui/FlatButton';
-import Dialog from 'material-ui/Dialog';
 
 import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
@@ -80,14 +79,6 @@ class App extends Component {
     );
   }
 
-  handleClose() {
-    this.setState({
-      ...this.state,
-      open: false,
-      tiles: []
-    })
-  }
-
   saveClose() {
     this.setState({
       ...this.state,
@@ -104,6 +95,13 @@ class App extends Component {
     })
   }
 
+  handleClose() {
+    this.setState({
+      ...this.state,
+      open: false,
+      tiles: []
+    })
+  }
 
   setTiles(tiles) {
     this.setState({
@@ -161,20 +159,12 @@ class App extends Component {
               removePlayer={this.removePlayer.bind(this)}
               />
           </div>
-          <Dialog
-            style={{userSelect: 'none'}}
-            open={this.state.open}
-            modal={true}
-            title={this.state.current ? ("Select tiles for " + this.state.current.name) : ''}
-            onRequestClose={this.handleClose}
-            autoScrollBodyContent={true}
-            actions={[
-              <FlatButton label="Cancel" primary={false} onTouchTap={this.handleClose.bind(this)}/>,
-              <FlatButton label="Save" primary={true} onTouchTap={this.saveClose.bind(this)} />
-            ]}
-          >
-            <TilesSelector setTiles={this.setTiles.bind(this)} />
-          </Dialog>
+          {this.state.open ? <TilesSelector
+                  current={this.state.current}
+                  setTiles={this.setTiles.bind(this)}
+                  handleClose={this.handleClose.bind(this)}
+                  saveClose={this.saveClose.bind(this)}
+                /> : ''}
         </div>
       </MuiThemeProvider>
     );

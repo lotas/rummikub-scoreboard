@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import FlatButton from 'material-ui/FlatButton';
+import Dialog from 'material-ui/Dialog';
 
 import './TileSelector.css';
 
@@ -61,12 +63,26 @@ class TilesSelector extends Component {
         const getState = this.getSelectedState.bind(this);
 
         return (
-          <div className="TilesSelector">
-            <TilesRow color={1} getSelectedState={getState} onSelectClick={setState} selected={this.state.selected} />
-            <TilesRow color={2} getSelectedState={getState} onSelectClick={setState} selected={this.state.selected} />
-            <TilesRow color={3} getSelectedState={getState} onSelectClick={setState} selected={this.state.selected} />
-            <TilesRow color={4} getSelectedState={getState} onSelectClick={setState} selected={this.state.selected} />
-          </div>
+            <Dialog
+                style={{userSelect: 'none'}}
+                open={true}
+                modal={true}
+                title={this.props.current ? ("Select tiles for " + this.props.current.name) : ''}
+                onRequestClose={this.props.handleClose}
+                autoScrollBodyContent={true}
+                actions={[
+                <FlatButton label="Cancel" primary={false} onTouchTap={() => this.props.handleClose()}/>,
+                <FlatButton label="Save" primary={true} onTouchTap={() => this.props.saveClose()} />
+                ]}
+            >
+            <div className="TilesSelector">
+                <TilesRow color={1} getSelectedState={getState} onSelectClick={setState} selected={this.state.selected} />
+                <TilesRow color={2} getSelectedState={getState} onSelectClick={setState} selected={this.state.selected} />
+                <TilesRow color={3} getSelectedState={getState} onSelectClick={setState} selected={this.state.selected} />
+                <TilesRow color={4} getSelectedState={getState} onSelectClick={setState} selected={this.state.selected} />
+            </div>
+
+          </Dialog>
         )
     }
 }
